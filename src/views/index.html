@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+{% block meta %}
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MT Auto Clicker - Work Smart, Not Hard</title>
+<meta name="description"
+  content="MT Auto Clicker automates repetitive tasks like clicks, scrolls, data entry across apps and websites with customizable, recordable automations to enhance productivity" />
+<meta name="robots" content="follow, index" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="MT Auto Clicker - Work Smart, Not Hard" />
+<meta property="og:description"
+  content="MT Auto Clicker automates repetitive tasks like clicks, scrolls, data entry across apps and websites with customizable, recordable automations to enhance productivity" />
+<meta property="og:url" content="https://www.mtautoclicker.com/" />
+<meta property="og:site_name" content="MT Auto Clicker" />
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:title" content="MT Auto Clicker - Work Smart, Not Hard" />
+<meta name="twitter:description"
+  content="MT Auto Clicker automates repetitive tasks like clicks, scrolls, data entry across apps and websites with customizable, recordable automations to enhance productivity" />
+<meta name="twitter:url" content="https://www.mtautoclicker.com/" />
+<meta name="twitter:image" content="https://www.mtautoclicker.com/images/logo.webp" />
+<link rel="canonical" href="https://www.mtautoclicker.com/" />
+
+<style>
+  .avatar {
+    width: 60px;
+    background-color: #ccc;
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+  }
+</style>
+
+{% endblock meta %}
+
+{% block body %}
+<div class="container" x-data="heightComparisonApp">
+  <h1>Height Comparison Tool</h1>
+
+  <button @click="addAvatar()">+ Add Avatar</button>
+
+  <template x-for="(avatar, index) in avatars" :key="index">
+    <div class="avatar" :style="`height: ${avatar.height}px; background-color: ${avatar.color}`">
+      <div style="font-size: 12px;" x-text="avatar.name"></div>
+      <div style="font-size: 10px;" x-text="avatar.height + ' cm'"></div>
+    </div>
+  </template>
+
+  <hr>
+
+  <!-- Form Inputs -->
+  <div>
+    <h2>Add Avatar</h2>
+    <input type="text" placeholder="Name" x-model="newAvatar.name">
+    <input type="number" placeholder="Height (cm)" x-model="newAvatar.height">
+    <select x-model="newAvatar.color">
+      <option value="#4b9cd3">Blue</option>
+      <option value="#e07a5f">Red</option>
+      <option value="#81b29a">Green</option>
+    </select>
+    <button @click="saveAvatar()">Save</button>
+  </div>
+</div>
+<script src="/public/script/main.js"></script>
+{% endblock body %}

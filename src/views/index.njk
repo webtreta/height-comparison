@@ -1,0 +1,330 @@
+{% extends 'main.njk' %}
+{% block meta %}
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MT Auto Clicker - Work Smart, Not Hard</title>
+<meta name="description"
+  content="MT Auto Clicker automates repetitive tasks like clicks, scrolls, data entry across apps and websites with customizable, recordable automations to enhance productivity" />
+<meta name="robots" content="follow, index" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="MT Auto Clicker - Work Smart, Not Hard" />
+<meta property="og:description"
+  content="MT Auto Clicker automates repetitive tasks like clicks, scrolls, data entry across apps and websites with customizable, recordable automations to enhance productivity" />
+<meta property="og:url" content="https://www.mtautoclicker.com/" />
+<meta property="og:site_name" content="MT Auto Clicker" />
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:title" content="MT Auto Clicker - Work Smart, Not Hard" />
+<meta name="twitter:description"
+  content="MT Auto Clicker automates repetitive tasks like clicks, scrolls, data entry across apps and websites with customizable, recordable automations to enhance productivity" />
+<meta name="twitter:url" content="https://www.mtautoclicker.com/" />
+<meta name="twitter:image" content="https://www.mtautoclicker.com/images/logo.webp" />
+<link rel="canonical" href="https://www.mtautoclicker.com/" />
+
+
+{% endblock meta %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto">
+    <!-- Height Comparison Visualization -->
+    <div class="mb-8 bg-white rounded-lg shadow-md overflow-hidden">
+      <!-- Main visualization area -->
+      <div class="relative h-144 border-b border-gray-300 bg-gray-50 overflow-hidden">
+        <!-- Background grid lines -->
+        {% for i in range(50, 221, 5) %}
+          {% set position = 200 - i %}
+          <div class="absolute w-full" style="bottom: {{ position * 0.5 }}px;">
+            <div class="border-t border-gray-200 relative">
+              {% if i % 10 == 0 %}
+                <span class="absolute -top-2 -left-10 text-xs text-gray-500 bg-white px-1 rounded">{{ i }} cm</span>
+                <span class="absolute -top-2 -right-16 text-xs text-gray-500 bg-white px-1 rounded">{{ ((i / 2.54) / 12) | int }}'{{ ((i / 2.54) % 12) | round }}″</span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+
+        <!-- People comparison -->
+        <div class="flex justify-around items-end h-full px-10 py-4">
+          {% for person in people %}
+            <div class="flex flex-col items-center relative group" style="height: {{ person.height * 0.5 }}px;">
+              <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 w-40 text-center">
+                <p class="font-bold text-sm">{{ person.name }}</p>
+                <p class="text-xs text-gray-600">{{ person.height }} cm ({{ person.heightInFeetInches }})</p>
+                <form action="/remove-person/{{ person.id }}" method="POST" class="mt-1">
+                  <button type="submit" class="text-xs text-red-500 hover:text-red-700">Remove</button>
+                </form>
+              </div>
+
+              <img
+                src="{{ person.avatar }}"
+                alt="{{ person.name }}"
+                class="h-full max-h-full object-contain absolute bottom-0"
+              >
+
+              <!-- Height indicator line -->
+              <div class="absolute w-full border-t border-red-400 bottom-0 -left-5 -right-5" style="width: 200%;"></div>
+
+              <!-- Name label below -->
+              <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+                <p class="text-xs font-medium">{{ person.name }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Control panel -->
+      <div class="bg-white p-4 border-t border-gray-200">
+        <div class="flex flex-wrap justify-between items-center gap-4">
+          <div class="flex items-center gap-2">
+            <button
+              onclick="document.getElementById('addPersonModal').classList.remove('hidden')"
+              class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded text-sm font-medium flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Person
+            </button>
+
+            <button class="text-gray-600 hover:text-primary px-4 py-2 rounded text-sm font-medium flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              Share
+            </button>
+
+            <button class="text-gray-600 hover:text-primary px-4 py-2 rounded text-sm font-medium flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Save
+            </button>
+          </div>
+
+          <div class="flex items-center">
+            <label for="scale-slider" class="mr-2 text-sm text-gray-600">Scale:</label>
+            <input
+              type="range"
+              id="scale-slider"
+              min="0.5"
+              max="2"
+              step="0.1"
+              value="1"
+              class="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- People selection grid -->
+    <div class="mb-8 bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-lg font-bold mb-4 text-gray-800">People</h2>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% for person in people %}
+          <div class="person-card bg-white rounded-lg shadow p-3 text-center cursor-pointer hover:shadow-md transition duration-200 border border-gray-100">
+            <div class="aspect-w-3 aspect-h-4 relative">
+              <img
+                src="{{ person.avatar }}"
+                alt="{{ person.name }}"
+                class="mx-auto h-24 object-contain"
+              >
+            </div>
+
+            <div class="mt-2">
+              <h3 class="text-sm font-medium truncate">{{ person.name }}</h3>
+              <p class="text-xs text-gray-500">{{ person.height }} cm</p>
+              <p class="text-xs text-gray-500">{{ person.heightInFeetInches }}</p>
+            </div>
+          </div>
+        {% endfor %}
+
+        <!-- Add person card -->
+        <div
+          onclick="document.getElementById('addPersonModal').classList.remove('hidden')"
+          class="person-card bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 p-3 text-center cursor-pointer hover:bg-gray-100 transition duration-200 flex flex-col items-center justify-center min-h-[148px]"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <p class="mt-2 text-sm text-gray-500 font-medium">Add Person</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popular categories -->
+    <div class="mb-8 bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-lg font-bold mb-4 text-gray-800">Popular Categories</h2>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div class="category-card bg-primary bg-opacity-10 rounded-lg p-4 hover:bg-opacity-20 transition cursor-pointer">
+          <h3 class="font-medium text-primary">Celebrities</h3>
+          <p class="text-xs text-gray-600 mt-1">Compare heights with famous people</p>
+        </div>
+
+        <div class="category-card bg-green-500 bg-opacity-10 rounded-lg p-4 hover:bg-opacity-20 transition cursor-pointer">
+          <h3 class="font-medium text-green-600">Athletes</h3>
+          <p class="text-xs text-gray-600 mt-1">Sports stars from around the world</p>
+        </div>
+
+        <div class="category-card bg-purple-500 bg-opacity-10 rounded-lg p-4 hover:bg-opacity-20 transition cursor-pointer">
+          <h3 class="font-medium text-purple-600">Historical Figures</h3>
+          <p class="text-xs text-gray-600 mt-1">Notable people from history</p>
+        </div>
+
+        <div class="category-card bg-yellow-500 bg-opacity-10 rounded-lg p-4 hover:bg-opacity-20 transition cursor-pointer">
+          <h3 class="font-medium text-yellow-600">Average Heights</h3>
+          <p class="text-xs text-gray-600 mt-1">Compare with average heights by country</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Person Modal -->
+  <div id="addPersonModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-gray-800">Add Person</h3>
+        <button
+          onclick="document.getElementById('addPersonModal').classList.add('hidden')"
+          class="text-gray-400 hover:text-gray-600"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form action="/add-person" method="POST" x-data="heightConverter()">
+        <div class="mb-4">
+          <label for="name" class="block text-gray-700 text-sm font-medium mb-1">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
+            required
+          >
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-medium mb-1">Height</label>
+
+          <!-- Height tabs -->
+          <div class="flex border-b border-gray-200 mb-4">
+            <button
+              type="button"
+              @click="activeTab = 'cm'"
+              :class="{'border-b-2 border-primary text-primary': activeTab === 'cm'}"
+              class="px-4 py-2 text-sm font-medium"
+              x-data="{ activeTab: 'cm' }"
+            >
+              Centimeters
+            </button>
+            <button
+              type="button"
+              @click="activeTab = 'feet'"
+              :class="{'border-b-2 border-primary text-primary': activeTab === 'feet'}"
+              class="px-4 py-2 text-sm font-medium"
+              x-data="{ activeTab: 'cm' }"
+            >
+              Feet & Inches
+            </button>
+          </div>
+
+          <!-- CM input -->
+          <div x-show="activeTab === 'cm'">
+            <input
+              type="number"
+              id="height"
+              name="height"
+              x-model="cm"
+              @input="updateFromCm()"
+              min="1"
+              max="300"
+              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
+              required
+            >
+            <span class="text-xs text-gray-500 mt-1 block">cm</span>
+          </div>
+
+          <!-- Feet & Inches input -->
+          <div x-show="activeTab === 'feet'" class="flex space-x-2">
+            <div>
+              <input
+                type="number"
+                x-model="feet"
+                @input="updateFromFeetInches()"
+                min="0"
+                max="10"
+                class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+              <span class="text-xs text-gray-500 mt-1 block">feet</span>
+            </div>
+            <div>
+              <input
+                type="number"
+                x-model="inches"
+                @input="updateFromFeetInches()"
+                min="0"
+                max="11"
+                class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+              <span class="text-xs text-gray-500 mt-1 block">inches</span>
+            </div>
+            <!-- Hidden input to store the actual cm value -->
+            <input type="hidden" name="height" :value="cm">
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-medium mb-1">Gender</label>
+          <div class="flex space-x-4">
+            <label class="inline-flex items-center">
+              <input type="radio" name="gender" value="male" class="form-radio" checked>
+              <span class="ml-2 text-sm">Male</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="radio" name="gender" value="female" class="form-radio">
+              <span class="ml-2 text-sm">Female</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-medium mb-1">Avatar</label>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="border rounded p-2 flex items-center justify-center cursor-pointer hover:bg-gray-50">
+              <img src="/img/avatars/male.svg" alt="Male Avatar" class="h-16">
+            </div>
+            <div class="border rounded p-2 flex items-center justify-center cursor-pointer hover:bg-gray-50">
+              <img src="/img/avatars/female.svg" alt="Female Avatar" class="h-16">
+            </div>
+            <!-- More avatar options could be added here -->
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button
+            type="button"
+            onclick="document.getElementById('addPersonModal').classList.add('hidden')"
+            class="px-4 py-2 border border-gray-300 rounded text-gray-700 mr-2 hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded"
+          >
+            Add Person
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock body %}

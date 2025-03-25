@@ -1,6 +1,6 @@
 module.exports = {
   mode: "jit",
-  content: ["./src/views/**/*.html", "./public/**/*.html"],
+  content: ["./src/views/**/*.html", "./public/**/*.html","./src/views/**/*.njk"],
   safelist: [
     "text-red-400",
     "text-green-400",

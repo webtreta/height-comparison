@@ -7,7 +7,7 @@ const FormData = require('form-data');
 const fs = require('fs'); // If you need to add files in FormData
 const path = require('path');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-
+const routes = require('./routes/index');
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
@@ -52,15 +52,10 @@ nunjucks.configure('src/views', {
   express: app
 });
 
-app.set('view engine', 'html');
+app.set('view engine', 'njk');
 
 
-app.get('/', (req, res) => {
-  res.render('index.html', {
-      // api_url: process.env.API_URL
-  });
-});
-
+app.use('/', routes);
 
 
 

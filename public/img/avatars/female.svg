@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300">
+  <!-- Head -->
+  <circle cx="50" cy="30" r="20" fill="#F5D0A9" />
+
+  <!-- Hair -->
+  <path d="M30 35 C25 25, 30 5, 50 5 C70 5, 75 25, 70 35 Z" fill="#8B4513" />
+  <path d="M30 35 L30 45 C35 50, 65 50, 70 45 L70 35 Z" fill="#8B4513" />
+
+  <!-- Eyes -->
+  <circle cx="42" cy="25" r="3" fill="#1C1C1C" />
+  <circle cx="58" cy="25" r="3" fill="#1C1C1C" />
+
+  <!-- Mouth -->
+  <path d="M42 38 Q50 43 58 38" fill="none" stroke="#1C1C1C" stroke-width="1.5" />
+
+  <!-- Neck -->
+  <rect x="45" y="50" width="10" height="10" fill="#F5D0A9" />
+
+  <!-- Body (Dress) -->
+  <path d="M35 60 L25 160 L75 160 L65 60 Z" fill="#D53F8C" />
+
+  <!-- Arms -->
+  <rect x="25" y="60" width="10" height="60" fill="#F5D0A9" />
+  <rect x="65" y="60" width="10" height="60" fill="#F5D0A9" />
+
+  <!-- Hands -->
+  <circle cx="30" cy="120" r="5" fill="#F5D0A9" />
+  <circle cx="70" cy="120" r="5" fill="#F5D0A9" />
+
+  <!-- Legs -->
+  <rect x="35" y="160" width="12" height="100" fill="#F5D0A9" />
+  <rect x="53" y="160" width="12" height="100" fill="#F5D0A9" />
+
+  <!-- Feet -->
+  <path d="M35 260 L30 260 L30 270 L47 270 L47 260 Z" fill="#DB2777" />
+  <path d="M53 260 L53 270 L70 270 L70 260 L65 260 Z" fill="#DB2777" />
+</svg>

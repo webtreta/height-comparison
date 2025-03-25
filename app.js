@@ -55,6 +55,11 @@ nunjucks.configure('src/views', {
 app.set('view engine', 'njk');
 
 
+
+app.use((req, res, next) => {
+  res.locals.now = new Date();
+  next();
+});
 app.use('/', routes);
 
 

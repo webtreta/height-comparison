@@ -9,7 +9,8 @@ let people = [
     height: 175,
     gender: 'male',
     heightInFeetInches: "5'9\"",
-    avatar: '/img/avatars/male.svg'
+    avatar: '/img/avatars/male.svg',
+    color: 'blue'
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ let people = [
     height: 162,
     gender: 'female',
     heightInFeetInches: "5'4\"",
-    avatar: '/img/avatars/female.svg'
+    avatar: '/img/avatars/female-red.svg',
+    color: 'red'
   }
 ];
 
@@ -25,8 +27,8 @@ let people = [
 function cmToFeetInches(cm) {
   const totalInches = cm / 2.54;
   const feet = Math.floor(totalInches / 12);
-  const inches = Math.round(totalInches % 12);
-  return `${feet}'${inches}"`;
+  const inches = Math.round(totalInches % 12 * 100) / 100;
+  return `${feet}'${inches.toFixed(2)}"`;
 }
 
 // Home page route
@@ -39,14 +41,19 @@ router.get('/', (req, res) => {
 
 // Add person route
 router.post('/add-person', (req, res) => {
-  const { name, height, gender } = req.body;
+  const { name, height, gender, avatar, color } = req.body;
 
   // Simple validation
   if (!name || !height) {
     return res.status(400).json({ error: 'Name and height are required' });
   }
 
-  const heightCm = parseInt(height);
+  const heightCm = parseFloat(height);
+
+  // Set default avatar based on gender and color selection
+  const avatarFile = gender === 'female'
+    ? `/img/avatars/female-${color || 'red'}.svg`
+    : `/img/avatars/male.svg`;
 
   // Create new person
   const newPerson = {
@@ -55,7 +62,8 @@ router.post('/add-person', (req, res) => {
     height: heightCm,
     gender: gender || 'male', // Default to male if not specified
     heightInFeetInches: cmToFeetInches(heightCm),
-    avatar: gender === 'female' ? '/img/avatars/female.svg' : '/img/avatars/male.svg'
+    avatar: avatar || avatarFile,
+    color: color || 'blue'
   };
 
   // Add to our list
@@ -70,6 +78,41 @@ router.post('/remove-person/:id', (req, res) => {
   const id = parseInt(req.params.id);
   people = people.filter(person => person.id !== id);
   res.redirect('/');
+});
+
+// Height calculator route
+router.get('/height-calculator', (req, res) => {
+  res.render('height-calculator', {
+    title: 'Height Calculator'
+  });
+});
+
+// About page route
+router.get('/about', (req, res) => {
+  res.render('about', {
+    title: 'About Height Comparison'
+  });
+});
+
+// Contact page route
+router.get('/contact', (req, res) => {
+  res.render('contact', {
+    title: 'Contact Us'
+  });
+});
+
+// Login page route
+router.get('/login', (req, res) => {
+  res.render('login', {
+    title: 'Login to Height Comparison'
+  });
+});
+
+// Signup page route
+router.get('/signup', (req, res) => {
+  res.render('signup', {
+    title: 'Sign Up for Height Comparison'
+  });
 });
 
 module.exports = router;

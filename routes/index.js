@@ -18,7 +18,7 @@ let people = [
     height: 162,
     gender: 'female',
     heightInFeetInches: "5'4\"",
-    avatar: '/img/avatars/female-red.svg',
+    avatar: '/img/avatars/female.svg',
     color: 'red'
   }
 ];
@@ -27,12 +27,13 @@ let people = [
 function cmToFeetInches(cm) {
   const totalInches = cm / 2.54;
   const feet = Math.floor(totalInches / 12);
-  const inches = Math.round(totalInches % 12 * 100) / 100;
-  return `${feet}'${inches.toFixed(2)}"`;
+  const inches = (totalInches % 12).toFixed(2);
+  return `${feet}'${inches}"`;
 }
 
 // Home page route
 router.get('/', (req, res) => {
+  console.log('Loading homepage, current people:', people);
   res.render('index', {
     title: 'Height Comparison',
     people: people
@@ -41,6 +42,8 @@ router.get('/', (req, res) => {
 
 // Add person route
 router.post('/add-person', (req, res) => {
+  console.log('Received form data:', req.body);
+
   const { name, height, gender, avatar, color } = req.body;
 
   // Simple validation
@@ -50,24 +53,33 @@ router.post('/add-person', (req, res) => {
 
   const heightCm = parseFloat(height);
 
-  // Set default avatar based on gender and color selection
-  const avatarFile = gender === 'female'
-    ? `/img/avatars/female-${color || 'red'}.svg`
-    : `/img/avatars/male.svg`;
+  // Set avatar based on gender and color selection
+  let avatarFile;
+  if (avatar && avatar !== '') {
+    avatarFile = avatar;
+  } else {
+    // Default avatar based on gender
+    avatarFile = gender === 'female'
+      ? `/img/avatars/female.svg`
+      : `/img/avatars/male.svg`;
+  }
 
   // Create new person
   const newPerson = {
-    id: people.length + 1,
+    id: Date.now(), // Use timestamp to ensure unique ID
     name,
     height: heightCm,
     gender: gender || 'male', // Default to male if not specified
     heightInFeetInches: cmToFeetInches(heightCm),
-    avatar: avatar || avatarFile,
-    color: color || 'blue'
+    avatar: avatarFile,
+    color: color || 'green' // Default green color matching the screenshot
   };
 
   // Add to our list
   people.push(newPerson);
+
+  console.log('Added new person:', newPerson);
+  console.log('Current people list:', people);
 
   // Redirect back to home page
   res.redirect('/');

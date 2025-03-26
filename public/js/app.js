@@ -16,14 +16,17 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gender selection
   const maleBtn = document.getElementById('male-btn');
   const femaleBtn = document.getElementById('female-btn');
+  const genderInput = document.getElementById('gender-input');
 
-  if (maleBtn && femaleBtn) {
+  if (maleBtn && femaleBtn && genderInput) {
     maleBtn.addEventListener('click', function() {
       maleBtn.classList.add('bg-blue-100', 'text-blue-800');
       maleBtn.classList.remove('bg-white', 'text-gray-800', 'border', 'border-gray-300');
 
       femaleBtn.classList.remove('bg-blue-100', 'text-blue-800');
       femaleBtn.classList.add('bg-white', 'text-gray-800', 'border', 'border-gray-300');
+
+      genderInput.value = 'male';
     });
 
     femaleBtn.addEventListener('click', function() {
@@ -32,6 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       maleBtn.classList.remove('bg-blue-100', 'text-blue-800');
       maleBtn.classList.add('bg-white', 'text-gray-800', 'border', 'border-gray-300');
+
+      genderInput.value = 'female';
     });
   }
 
@@ -97,14 +102,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const feetInput = document.getElementById('feet-input');
   const inchesInput = document.getElementById('inches-input');
   const cmInput = document.getElementById('cm-input');
+  const heightInput = document.getElementById('height-input');
 
-  if (feetInput && inchesInput && cmInput) {
+  if (feetInput && inchesInput && cmInput && heightInput) {
     feetInput.addEventListener('input', function() {
       const feet = parseInt(feetInput.value) || 0;
       const inches = parseFloat(inchesInput.value) || 0;
       const cm = feetInchesToCm(feet, inches);
 
       cmInput.value = cm.toFixed(2);
+      heightInput.value = cm.toFixed(2);
       updatePersonHeight(cm);
     });
 
@@ -114,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const cm = feetInchesToCm(feet, inches);
 
       cmInput.value = cm.toFixed(2);
+      heightInput.value = cm.toFixed(2);
       updatePersonHeight(cm);
     });
 
@@ -125,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       feetInput.value = feet;
       inchesInput.value = inches;
+      heightInput.value = cm.toFixed(2);
       updatePersonHeight(cm);
     });
   }
@@ -132,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Avatar selection
   const avatarBtn = document.querySelector('button.text-blue-500.hover\\:text-blue-700');
   const avatarSelection = document.getElementById('avatar-selection');
+  const avatarInput = document.getElementById('avatar-input');
 
   if (avatarBtn && avatarSelection) {
     avatarBtn.addEventListener('click', function() {
@@ -140,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Close avatar selection when clicking outside
     document.addEventListener('click', function(e) {
-      if (!avatarSelection.contains(e.target) && e.target !== avatarBtn) {
+      if (!avatarSelection.contains(e.target) && e.target !== avatarBtn && !avatarBtn.contains(e.target)) {
         avatarSelection.classList.add('hidden');
       }
     });
@@ -159,58 +169,89 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Avatar selection
-    const avatarButtons = avatarSelection.querySelectorAll('button.border.border-gray-200');
+    const avatarButtons = avatarSelection.querySelectorAll('.avatar-btn');
     avatarButtons.forEach(button => {
       button.addEventListener('click', function() {
         avatarButtons.forEach(btn => {
           btn.classList.remove('border-blue-500');
         });
         this.classList.add('border-blue-500');
+
+        // Store the selected avatar path in the hidden input
+        if (avatarInput) {
+          avatarInput.value = this.getAttribute('data-avatar');
+        }
       });
     });
   }
 
-  // Function to update the person visualization
+  // Function to update the person visualization preview
   function updatePersonHeight(cm) {
-    const personSvg = document.querySelector('.max-h-full');
-    if (personSvg) {
-      personSvg.style.height = (cm * 0.5) + 'px';
+    const preview = document.querySelector('.max-h-full');
+    if (preview) {
+      preview.style.height = (cm * 0.5) + 'px';
     }
   }
 
   // Color selection for avatars
-  const colorButtons = document.querySelectorAll('.w-8.h-8.rounded-full');
+  const colorButtons = document.querySelectorAll('.avatar-color-btn');
+  const colorInput = document.getElementById('color-input');
 
-  if (colorButtons.length > 0) {
+  if (colorButtons.length > 0 && colorInput) {
     colorButtons.forEach(button => {
       button.addEventListener('click', function() {
-        const color = window.getComputedStyle(this).backgroundColor;
+        const color = this.getAttribute('data-color');
 
-        // Here you would update the avatar color
-        // This is just a placeholder for the actual implementation
-        console.log('Selected color:', color);
+        // Remove selected class from all buttons
+        colorButtons.forEach(btn => {
+          btn.classList.remove('ring-2', 'ring-offset-2', 'ring-blue-500');
+        });
+
+        // Add selected class to clicked button
+        this.classList.add('ring-2', 'ring-offset-2', 'ring-blue-500');
+
+        // Update hidden input
+        colorInput.value = color;
       });
     });
   }
 
-  // Add person button
+  // Add person button (this is just the button to show the form)
   const addPersonBtn = document.getElementById('add-person-btn');
+  const personForm = document.getElementById('person-form');
 
-  if (addPersonBtn) {
+  if (addPersonBtn && personForm) {
     addPersonBtn.addEventListener('click', function() {
-      // Get form values
+      // Focus on the name input to make it easy to start entering data
       const nameInput = document.getElementById('name-input');
-      const height = cmInput.value;
-      const gender = maleBtn.classList.contains('bg-blue-100') ? 'male' : 'female';
-
-      if (nameInput && nameInput.value.trim() !== '' && height) {
-        // In a real app, you would submit this data to the server
-        console.log('Adding person:', {
-          name: nameInput.value,
-          height,
-          gender
-        });
+      if (nameInput) {
+        nameInput.focus();
+        // Scroll to the form if needed
+        personForm.scrollIntoView({ behavior: 'smooth' });
       }
+    });
+  }
+
+  // Form submission validation
+  const personFormElement = document.getElementById('person-form');
+  if (personFormElement) {
+    personFormElement.addEventListener('submit', function(e) {
+      const nameInput = document.getElementById('name-input');
+      const heightInput = document.getElementById('height-input');
+
+      if (!nameInput || nameInput.value.trim() === '' || !heightInput || heightInput.value <= 0) {
+        e.preventDefault();
+        alert('Please enter a valid name and height');
+        return false;
+      }
+
+      // Make sure the height input is updated with the latest value
+      if (cmInput && heightInput) {
+        heightInput.value = cmInput.value;
+      }
+
+      // Everything looks good, submit the form
+      return true;
     });
   }
 
@@ -223,9 +264,88 @@ document.addEventListener('DOMContentLoaded', function() {
       const scale = this.value / 50; // Normalize to 0-2 range
 
       // Apply scaling to the visualization
-      const personContainer = document.querySelector('.flex.justify-center.items-end.absolute');
+      const personContainer = document.querySelector('#people-visualization');
       if (personContainer) {
         personContainer.style.transform = `scale(${scale})`;
+        personContainer.style.transformOrigin = 'center bottom';
+      }
+    });
+  }
+
+  // Function to add a new person to the visualization dynamically (for client-side preview)
+  function addPersonToVisualization(name, height, gender, avatar, color) {
+    const peopleVisualization = document.getElementById('people-visualization');
+    if (!peopleVisualization) return;
+
+    const personElement = document.createElement('div');
+    personElement.className = 'flex flex-col items-center mx-4';
+
+    const infoElement = document.createElement('div');
+    infoElement.className = 'text-xs text-center mb-1';
+
+    const nameElement = document.createElement('div');
+    nameElement.textContent = name;
+
+    const cmElement = document.createElement('div');
+    cmElement.textContent = `cm: ${height}`;
+
+    const ftElement = document.createElement('div');
+    ftElement.textContent = `ft: ${cmToFeetInches(height)}`;
+
+    infoElement.appendChild(nameElement);
+    infoElement.appendChild(cmElement);
+    infoElement.appendChild(ftElement);
+
+    const visualElement = document.createElement('div');
+    visualElement.className = 'relative';
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '100');
+    svg.setAttribute('height', '300');
+    svg.setAttribute('viewBox', '0 0 100 300');
+    svg.classList.add('max-h-full');
+    svg.style.height = `${height * 0.5}px`;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M50,300 C70,300 90,250 90,200 C90,150 70,100 50,100 C30,100 10,150 10,200 C10,250 30,300 50,300 Z');
+    path.setAttribute('fill', '#4ade80');
+
+    svg.appendChild(path);
+    visualElement.appendChild(svg);
+
+    personElement.appendChild(infoElement);
+    personElement.appendChild(visualElement);
+
+    // Check if we need to remove "Add a person to start" message
+    const emptyMessage = peopleVisualization.querySelector('div:not([class*="flex-col"])');
+    if (emptyMessage) {
+      peopleVisualization.innerHTML = '';
+    }
+
+    peopleVisualization.appendChild(personElement);
+  }
+
+  // For client-side preview, you could add this to the form submit event
+  // This would show the new person immediately without waiting for page refresh
+  if (personFormElement) {
+    personFormElement.addEventListener('submit', function(e) {
+      const nameInput = document.getElementById('name-input');
+      const heightInput = document.getElementById('height-input');
+      const genderInput = document.getElementById('gender-input');
+      const avatarInput = document.getElementById('avatar-input');
+      const colorInput = document.getElementById('color-input');
+
+      if (nameInput && heightInput && genderInput) {
+        const name = nameInput.value;
+        const height = parseFloat(heightInput.value);
+        const gender = genderInput.value;
+        const avatar = avatarInput ? avatarInput.value : '';
+        const color = colorInput ? colorInput.value : 'green';
+
+        if (name && height) {
+          // This doesn't prevent form submission - it just previews the result
+          // addPersonToVisualization(name, height, gender, avatar, color);
+        }
       }
     });
   }

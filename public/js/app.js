@@ -277,9 +277,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const peopleVisualization = document.getElementById('people-visualization');
     if (!peopleVisualization) return;
 
+    // Create a new person element
     const personElement = document.createElement('div');
     personElement.className = 'flex flex-col items-center mx-4';
 
+    // Add name and height information
     const infoElement = document.createElement('div');
     infoElement.className = 'text-xs text-center mb-1';
 
@@ -296,10 +298,10 @@ document.addEventListener('DOMContentLoaded', function() {
     infoElement.appendChild(cmElement);
     infoElement.appendChild(ftElement);
 
+    // Add avatar visualization
     const visualElement = document.createElement('div');
     visualElement.className = 'relative';
 
-    // Use male.svg or female.svg based on gender
     const avatarImg = document.createElement('img');
     avatarImg.src = gender === 'male' ? '/img/avatars/male.svg' : '/img/avatars/female.svg';
     avatarImg.alt = `${gender} avatar`;
@@ -311,12 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
     personElement.appendChild(infoElement);
     personElement.appendChild(visualElement);
 
-    // Check if we need to remove "Add a person to start" message
-    const emptyMessage = peopleVisualization.querySelector('div:not([class*="flex-col"])');
-    if (emptyMessage) {
-      peopleVisualization.innerHTML = '';
-    }
-
+    // Append the new person to the visualization container
     peopleVisualization.appendChild(personElement);
   }
 

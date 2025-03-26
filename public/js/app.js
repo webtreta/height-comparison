@@ -299,19 +299,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const visualElement = document.createElement('div');
     visualElement.className = 'relative';
 
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '100');
-    svg.setAttribute('height', '300');
-    svg.setAttribute('viewBox', '0 0 100 300');
-    svg.classList.add('max-h-full');
-    svg.style.height = `${height * 0.5}px`;
+    // Use male.svg or female.svg based on gender
+    const avatarImg = document.createElement('img');
+    avatarImg.src = gender === 'male' ? '/img/avatars/male.svg' : '/img/avatars/female.svg';
+    avatarImg.alt = `${gender} avatar`;
+    avatarImg.style.height = `${height * 0.5}px`; // Scale the avatar height
+    avatarImg.classList.add('max-h-full');
 
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', 'M50,300 C70,300 90,250 90,200 C90,150 70,100 50,100 C30,100 10,150 10,200 C10,250 30,300 50,300 Z');
-    path.setAttribute('fill', '#4ade80');
-
-    svg.appendChild(path);
-    visualElement.appendChild(svg);
+    visualElement.appendChild(avatarImg);
 
     personElement.appendChild(infoElement);
     personElement.appendChild(visualElement);
@@ -328,7 +323,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // For client-side preview, you could add this to the form submit event
   // This would show the new person immediately without waiting for page refresh
   if (personFormElement) {
-    personFormElement.addEventListener('submit', function(e) {
+    personFormElement.addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent the form from submitting and refreshing the page
+
       const nameInput = document.getElementById('name-input');
       const heightInput = document.getElementById('height-input');
       const genderInput = document.getElementById('gender-input');
@@ -343,8 +340,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const color = colorInput ? colorInput.value : 'green';
 
         if (name && height) {
-          // This doesn't prevent form submission - it just previews the result
-          // addPersonToVisualization(name, height, gender, avatar, color);
+          // Add the person to the visualization
+          addPersonToVisualization(name, height, gender, avatar, color);
+
+          // Optionally, clear the form inputs after adding the person
+          nameInput.value = '';
+          heightInput.value = '';
+          genderInput.value = 'male'; // Reset to default gender
+          avatarInput.value = '';
+          colorInput.value = 'green';
         }
       }
     });

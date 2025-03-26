@@ -1,5 +1,41 @@
 // Height Comparison App Frontend JavaScript
+const defaultCmScale = [
+  255, 242, 229, 216, 204, 191, 178, 165, 153, 140,
+  127, 115, 102, 89, 76, 64, 51, 38, 25, 13, 0
+];
+const defaultFtScale = [
+  "8' 4.21''", "7' 11.20''", "7' 6.19''", "7' 1.18''", "6' 8.17''",
+  "6' 3.16''", "5' 10.15''", "5' 5.14''", "5' 0.13''", "4' 7.12''",
+  "4' 2.11''", "3' 9.10''", "3' 4.09''", "2' 11.08''", "2' 6.06''",
+  "2' 1.05''", "1' 8.04''", "1' 3.03''", "0' 10.02''", "0' 5.01''", "0' 0.00''"
+];
+function initializeDefaultScales() {
+  const cmScaleContainer = document.querySelector('.left-scale');
+  const ftScaleContainer = document.querySelector('.right-scale');
 
+  if (!cmScaleContainer || !ftScaleContainer) return;
+
+  // Render default CM scale
+  cmScaleContainer.innerHTML = '';
+  defaultCmScale.forEach(cm => {
+    const cmDiv = document.createElement('div');
+    cmDiv.textContent = cm;
+    cmDiv.className = 'text-gray-500';
+    cmScaleContainer.appendChild(cmDiv);
+  });
+
+  // Render default Feet/Inches scale
+  ftScaleContainer.innerHTML = '';
+  defaultFtScale.forEach(ft => {
+    const ftDiv = document.createElement('div');
+    ftDiv.textContent = ft;
+    ftDiv.className = 'text-gray-500';
+    ftScaleContainer.appendChild(ftDiv);
+  });
+}
+
+// Call this function on page load
+initializeDefaultScales();
 document.addEventListener('DOMContentLoaded', function() {
   // Height unit conversion functions
   function cmToFeetInches(cm) {
@@ -276,11 +312,9 @@ document.addEventListener('DOMContentLoaded', function() {
   function addPersonToVisualization(name, height, gender, avatar, color) {
     const peopleVisualization = document.getElementById('people-visualization');
     if (!peopleVisualization) return;
-    const visualizationContainer = document.getElementById('people-visualization');
-    const visualizationHeight = visualizationContainer.offsetHeight; // Get container height in pixels
-    const maxHeightInCm = 280; // Maximum height in cm
-    const scalingFactor = visualizationHeight / maxHeightInCm;
-    // const scalingFactor = 800 / 280; // Adjust based on your visualization height and max height
+
+    const visualizationHeight = peopleVisualization.offsetHeight; // Get container height in pixels
+    const scalingFactor = visualizationHeight / currentMaxHeightInCm; // Scale based on current max height
 
     // Create a new person element
     const personElement = document.createElement('div');
@@ -320,8 +354,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Append the new person to the visualization container
     peopleVisualization.appendChild(personElement);
+
+    // Update the graph scales dynamically
+    updateGraphScales(height);
+  }
+  let currentMaxHeightInCm = 255; // Default maximum height in cm
+
+function updateGraphScales(newHeightInCm) {
+  const cmScaleContainer = document.querySelector('.left-scale');
+  const ftScaleContainer = document.querySelector('.right-scale');
+
+  if (!cmScaleContainer || !ftScaleContainer) return;
+
+  // Check if the new height exceeds the current maximum height
+  if (newHeightInCm > currentMaxHeightInCm) {
+    currentMaxHeightInCm = Math.ceil(newHeightInCm / 14) * 14; // Round up to the nearest multiple of 14
+  } else {
+    return; // No need to update the graph if the new height is within the current range
   }
 
+  const step = currentMaxHeightInCm / 20; // Divide into 20 steps for the scale
+
+  // Update the cm scale
+  cmScaleContainer.innerHTML = '';
+  for (let i = currentMaxHeightInCm; i >= 0; i -= step) {
+    const cmDiv = document.createElement('div');
+    cmDiv.textContent = Math.round(i);
+    cmDiv.className = 'text-gray-500';
+    cmScaleContainer.appendChild(cmDiv);
+  }
+
+  // Update the feet/inches scale
+  ftScaleContainer.innerHTML = '';
+  for (let i = currentMaxHeightInCm; i >= 0; i -= step) {
+    const feetInches = cmToFeetInches(i);
+    const ftDiv = document.createElement('div');
+    ftDiv.textContent = feetInches;
+    ftDiv.className = 'text-gray-500';
+    ftScaleContainer.appendChild(ftDiv);
+  }
+}
   // For client-side preview, you could add this to the form submit event
   // This would show the new person immediately without waiting for page refresh
   if (personFormElement) {

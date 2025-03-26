@@ -202,27 +202,14 @@
 <div class="flex-1 overflow-auto relative">
   <div class="absolute inset-0">
     <!-- Height scale on left (Centimeters) -->
-    <div class="absolute left-0 top-0 bottom-0 w-20 flex flex-col justify-between text-xs text-right pr-2 border-r border-gray-200 z-10 bg-white bg-opacity-80">
-      <div class="text-gray-500 pt-1">cm</div>
-      {% set cm_values = [280, 266, 252, 238, 224, 210, 196, 182, 168, 154, 140, 126, 112, 98, 84, 70, 56, 42, 28, 14, 0] %}
-      {% for cm in cm_values %}
-        <div class="text-gray-500">{{ cm }}</div>
-      {% endfor %}
-    </div>
+    <div class="absolute left-0 top-0 bottom-0 w-20 flex flex-col justify-between text-xs text-right pr-2 border-r border-gray-200 z-10 bg-white bg-opacity-80 left-scale">
+  <!-- Dynamic cm scale will be inserted here -->
+</div>
 
     <!-- Height scale on right (Feet and Inches) -->
-    <div class="absolute right-0 top-0 bottom-0 w-20 flex flex-col justify-between text-xs text-left pl-2 border-l border-gray-200 z-10 bg-white bg-opacity-80">
-      <div class="text-gray-500 pt-1">Ft</div>
-      {% set ft_values = [
-        "9' 2.24''", "8' 8.72''", "8' 3.21''", "7' 9.70''", "7' 4.19''",
-        "6' 10.68''", "6' 5.17''", "5' 11.65''", "5' 6.14''", "5' 0.63''",
-        "4' 7.12''", "4' 1.61''", "3' 8.09''", "3' 2.58''", "2' 9.07''",
-        "2' 3.56''", "1' 10.05''", "1' 4.54''", "0' 11.02''", "0' 5.51''", "0' 0.00''"
-      ] %}
-      {% for ft in ft_values %}
-        <div class="text-gray-500">{{ ft }}</div>
-      {% endfor %}
-    </div>
+    <div class="absolute right-0 top-0 bottom-0 w-20 flex flex-col justify-between text-xs text-left pl-2 border-l border-gray-200 z-10 bg-white bg-opacity-80 right-scale">
+  <!-- Dynamic feet/inches scale will be inserted here -->
+</div>
 
     <!-- Horizontal grid lines -->
     <div class="absolute left-20 right-20 top-0 bottom-0">

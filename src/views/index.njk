@@ -225,13 +225,13 @@
     <!-- Person height visualization -->
 <div class="flex justify-center items-end absolute bottom-0 left-20 right-20 h-full" id="people-visualization">
   {% for person in people %}
-  <div class="flex flex-col items-center mx-4">
+  <div class="flex flex-col items-center mx-4 hidden">
     <div class="text-xs text-center mb-1">
       <div>{{ person.name }}</div>
       <div>cm: {{ person.height }}</div>
       <div>ft: {{ person.heightInFeetInches }}</div>
     </div>
-    <div class="relative">
+    <div class="relative ">
       <!-- Scale the avatar height based on the person's height -->
       <svg width="100" height="300" viewBox="0 0 100 300" class="max-h-full" style="height: {{ person.height * 0.5 }}px;">
         <path d="M50,300 C70,300 90,250 90,200 C90,150 70,100 50,100 C30,100 10,150 10,200 C10,250 30,300 50,300 Z" fill="#4ade80"/>

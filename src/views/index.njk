@@ -199,71 +199,73 @@
     </div>
 
     <!-- Height comparison visualization -->
-    <div class="flex-1 overflow-auto relative">
-      <div class="absolute inset-0">
-        <!-- Height scale on left -->
-        <div class="absolute left-0 top-0 bottom-0 w-20 flex flex-col justify-between text-xs text-right pr-2 border-r border-gray-200 z-10 bg-white bg-opacity-80">
-          <div class="text-gray-500 pt-1">cm</div>
-          {% for i in range(255, 0, -25) %}
-            <div class="text-gray-500">{{ i }}</div>
-          {% endfor %}
-        </div>
-
-        <!-- Height scale on right -->
-        <div class="absolute right-0 top-0 bottom-0 w-20 flex flex-col justify-between text-xs text-left pl-2 border-l border-gray-200 z-10 bg-white bg-opacity-80">
-          <div class="text-gray-500 pt-1">Ft</div>
-          <div class="text-gray-500">8' 4.21"</div>
-          <div class="text-gray-500">7' 11.20"</div>
-          <div class="text-gray-500">7' 6.19"</div>
-          <div class="text-gray-500">7' 1.18"</div>
-          <div class="text-gray-500">6' 8.17"</div>
-          <div class="text-gray-500">6' 3.16"</div>
-          <div class="text-gray-500">5' 10.15"</div>
-          <div class="text-gray-500">5' 5.14"</div>
-          <div class="text-gray-500">5' 0.13"</div>
-          <div class="text-gray-500">4' 7.12"</div>
-        </div>
-
-        <!-- Horizontal grid lines -->
-        <div class="absolute left-20 right-20 top-0 bottom-0">
-          {% for i in range(255, 0, -25) %}
-            <div class="absolute border-t border-gray-100 left-0 right-0" style="top: {{ (255 - i) / 255 * 100 }}%"></div>
-          {% endfor %}
-
-          <!-- Zero line (ground) -->
-          <div class="absolute border-t border-red-500 left-0 right-0 bottom-0"></div>
-        </div>
-
-        <!-- Person height visualization -->
-        <div class="flex justify-center items-end absolute bottom-0 left-20 right-20 h-full" id="people-visualization">
-          {% for person in people %}
-          <div class="flex flex-col items-center mx-4">
-            <div class="text-xs text-center mb-1">
-              <div>{{ person.name }}</div>
-              <div>cm: {{ person.height }}</div>
-              <div>ft: {{ person.heightInFeetInches }}</div>
-            </div>
-            <div class="relative">
-              <svg width="100" height="300" viewBox="0 0 100 300" class="max-h-full" style="height: {{ person.height * 0.5 }}px;">
-                <path d="M50,300 C70,300 90,250 90,200 C90,150 70,100 50,100 C30,100 10,150 10,200 C10,250 30,300 50,300 Z" fill="#4ade80"/>
-              </svg>
-            </div>
-          </div>
-          {% else %}
-          <div class="flex flex-col items-center mx-4">
-            <div class="text-xs text-center mb-1">
-              <div>Add a person to start</div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-
-        <!-- Site watermark -->
-        <div class="absolute top-4 right-1/2 transform translate-x-1/2 text-gray-400 opacity-30 text-sm">
-          HeightComparison.com
-        </div>
-      </div>
+<div class="flex-1 overflow-auto relative">
+  <div class="absolute inset-0">
+    <!-- Height scale on left (Centimeters) -->
+    <div class="absolute left-0 top-0 bottom-0 w-20 flex flex-col justify-between text-xs text-right pr-2 border-r border-gray-200 z-10 bg-white bg-opacity-80">
+      <div class="text-gray-500 pt-1">cm</div>
+      {% set cm_values = [280, 266, 252, 238, 224, 210, 196, 182, 168, 154, 140, 126, 112, 98, 84, 70, 56, 42, 28, 14, 0] %}
+      {% for cm in cm_values %}
+        <div class="text-gray-500">{{ cm }}</div>
+      {% endfor %}
     </div>
+
+    <!-- Height scale on right (Feet and Inches) -->
+    <div class="absolute right-0 top-0 bottom-0 w-20 flex flex-col justify-between text-xs text-left pl-2 border-l border-gray-200 z-10 bg-white bg-opacity-80">
+      <div class="text-gray-500 pt-1">Ft</div>
+      {% set ft_values = [
+        "9' 2.24''", "8' 8.72''", "8' 3.21''", "7' 9.70''", "7' 4.19''",
+        "6' 10.68''", "6' 5.17''", "5' 11.65''", "5' 6.14''", "5' 0.63''",
+        "4' 7.12''", "4' 1.61''", "3' 8.09''", "3' 2.58''", "2' 9.07''",
+        "2' 3.56''", "1' 10.05''", "1' 4.54''", "0' 11.02''", "0' 5.51''", "0' 0.00''"
+      ] %}
+      {% for ft in ft_values %}
+        <div class="text-gray-500">{{ ft }}</div>
+      {% endfor %}
+    </div>
+
+    <!-- Horizontal grid lines -->
+    <div class="absolute left-20 right-20 top-0 bottom-0">
+      {% for i in range(20) %}
+        <div class="absolute border-t border-gray-100 left-0 right-0" style="top: {{ i * 5 }}%"></div>
+      {% endfor %}
+
+      <!-- Zero line (ground) -->
+      <div class="absolute border-t border-red-500 left-0 right-0 bottom-0"></div>
+    </div>
+
+    <!-- Person height visualization -->
+    <!-- Person height visualization -->
+<div class="flex justify-center items-end absolute bottom-0 left-20 right-20 h-full" id="people-visualization">
+  {% for person in people %}
+  <div class="flex flex-col items-center mx-4">
+    <div class="text-xs text-center mb-1">
+      <div>{{ person.name }}</div>
+      <div>cm: {{ person.height }}</div>
+      <div>ft: {{ person.heightInFeetInches }}</div>
+    </div>
+    <div class="relative">
+      <!-- Scale the avatar height based on the person's height -->
+      <svg width="100" height="300" viewBox="0 0 100 300" class="max-h-full" style="height: {{ person.height * 0.5 }}px;">
+        <path d="M50,300 C70,300 90,250 90,200 C90,150 70,100 50,100 C30,100 10,150 10,200 C10,250 30,300 50,300 Z" fill="#4ade80"/>
+      </svg>
+    </div>
+  </div>
+  {% else %}
+  <div class="flex flex-col items-center mx-4">
+    <div class="text-xs text-center mb-1">
+      <div>Add a person to start</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+    <!-- Site watermark -->
+    <div class="absolute top-4 right-1/2 transform translate-x-1/2 text-gray-400 opacity-30 text-sm">
+      HeightComparison.com
+    </div>
+  </div>
+</div>
   </div>
 </div>
 {% endblock %}

@@ -2,10 +2,8 @@
   display: flex;
   align-items: flex-end; /* Align avatars to the bottom */
   justify-content: center;
-  height: 400px; /* Adjust as needed */
-  border: 1px solid #ccc;
+  height: 100%; /* Full height of the visualization area */
   position: relative;
-  overflow-x: auto;
 }
 
 #people-visualization .flex-col {

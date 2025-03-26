@@ -276,6 +276,11 @@ document.addEventListener('DOMContentLoaded', function() {
   function addPersonToVisualization(name, height, gender, avatar, color) {
     const peopleVisualization = document.getElementById('people-visualization');
     if (!peopleVisualization) return;
+    const visualizationContainer = document.getElementById('people-visualization');
+    const visualizationHeight = visualizationContainer.offsetHeight; // Get container height in pixels
+    const maxHeightInCm = 280; // Maximum height in cm
+    const scalingFactor = visualizationHeight / maxHeightInCm;
+    // const scalingFactor = 800 / 280; // Adjust based on your visualization height and max height
 
     // Create a new person element
     const personElement = document.createElement('div');
@@ -305,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const avatarImg = document.createElement('img');
     avatarImg.src = gender === 'male' ? '/img/avatars/male.svg' : '/img/avatars/female.svg';
     avatarImg.alt = `${gender} avatar`;
-    avatarImg.style.height = `${height * 0.5}px`; // Scale the avatar height
+    avatarImg.style.height = `${height * scalingFactor}px`; // Scale the avatar height
     avatarImg.classList.add('max-h-full');
 
     visualElement.appendChild(avatarImg);
